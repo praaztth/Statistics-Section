@@ -16,7 +16,7 @@ class UserCell: UITableViewCell {
         let view = UIImageView()
         view.layer.cornerRadius = 20
         view.layer.masksToBounds = true
-        view.contentMode = .scaleAspectFit
+        view.contentMode = .scaleAspectFill
         
         return view
     }()
@@ -40,22 +40,30 @@ class UserCell: UITableViewCell {
         contentView.addSubview(avatarContainer)
         contentView.addSubview(titleLabel)
         avatarContainer.addSubview(avatarView)
-        avatarContainer.addSubview(badgeView)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setup(title: String) {
-        avatarView.image = UIImage(systemName: "trash.slash.square.fill")
+    func setup(title: String, isOnline: Bool, imageData: Data?) {
         titleLabel.text = title
+        
+        if let imageData = imageData {
+            avatarView.image = UIImage(data: imageData)
+        } else {
+            avatarView.image = UIImage(systemName: "trash.slash.square.fill")
+        }
+        
+        if isOnline {
+            avatarContainer.addSubview(badgeView)
+        }
     }
     
     override func prepareForReuse() {
         avatarView.image = nil
         titleLabel.text = nil
-        
+        badgeView.removeFromSuperview()
     }
     
     override func layoutSubviews() {
@@ -70,9 +78,9 @@ class UserCell: UITableViewCell {
     }
 }
 
-#Preview {
-    let cell = UserCell()
-    cell.setup(title: "dsgdsgd, 25")
-    
-    return cell
-}
+//#Preview {
+//    let cell = UserCell()
+//    cell.setup(title: "dsgdsgd, 25")
+//    
+//    return cell
+//}

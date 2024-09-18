@@ -6,12 +6,13 @@
 //
 
 import Foundation
+import RealmSwift
 
 struct Responce: Decodable {
-    var users: [User]
+    var users: [UserJson]
 }
 
-struct User: Decodable {
+struct UserJson: Decodable {
     var id: Int
     var sex: String
     var username: String
@@ -31,7 +32,7 @@ class NetworkManager {
     
     static let shared = NetworkManager()
     
-    func fetchUsers(completion: @escaping ([User]) -> Void) {
+    func fetchUsers(completion: @escaping ([UserJson]) -> Void) {
         guard let url = URL(string: NetworkManager.usersUrl) else { return }
         
         URLSession.shared.dataTask(with: url) { data, responce, error in
@@ -45,5 +46,16 @@ class NetworkManager {
                 print(error)
             }
         }.resume()
+    }
+    
+    func fetchAvatarForUser(id: Int, url: String, completion: @escaping (Data) -> Void) {
+        guard let url = URL(string: url) else { return }
+        
+        URLSession.shared.dataTask(with: url) { data, responce, error in
+            guard let data = data, error == nil else { return }
+            
+            completion(data)
+        }.resume()
+        
     }
 }

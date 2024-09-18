@@ -21,12 +21,6 @@ class StatisticsViewController: UITableViewController {
             case unsubscribers
         }
         
-        struct User {
-            var name: String
-            var age: Int
-            var avatarUrl: String
-        }
-        
         var title: String?
         var section: Sections?
         var childs: [Cell]?
@@ -42,6 +36,13 @@ class StatisticsViewController: UITableViewController {
         }
     }
     
+    struct User {
+        var name: String
+        var age: Int
+        var isOnline: Bool
+        var avatarData: Data?
+    }
+    
     enum State {
         case byDay
         case byWeek
@@ -53,7 +54,7 @@ class StatisticsViewController: UITableViewController {
     var visitorsChartState: State = .byDay
     var sexAndAgeChartState: State = .byDay
     
-    var users: [UserModel] = []
+    var users: [User] = []
     
     init() {
         super.init(style: .insetGrouped)
@@ -73,9 +74,9 @@ class StatisticsViewController: UITableViewController {
     }
 
     func loadData() {
-//        DispatchQueue.global(qos: .userInitiated).async {
-//            self.getUsers()
-//        }
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.getUsers()
+        }
         
         datasource = [
             Cell(title: "Посетители", childs: [
@@ -90,11 +91,7 @@ class StatisticsViewController: UITableViewController {
                 "По месяцам"
             ]),
             
-            Cell(title: "Чаще всех посещают Ваш профиль", section: .topVisitors, users: [
-                    Cell.User(name: "ann.aeom", age: 25, avatarUrl: "gfsdfg"),
-                    Cell.User(name: "akimovahuiw", age: 23, avatarUrl: "gfsdfg"),
-                    Cell.User(name: "gulia.filova", age: 32, avatarUrl: "gfsdfg")
-            ]),
+            Cell(title: "Чаще всех посещают Ваш профиль", section: .topVisitors),
             
             Cell(title: "Пол и возраст", childs: [
                 Cell(section: .chartBySex),
@@ -116,39 +113,45 @@ class StatisticsViewController: UITableViewController {
     func getUsers() {
         do {
             let realm = try Realm()
-//            users = realm.objects(UserModel.self)
+            let objects = realm.objects(UserModel.self).sorted(by: { $0.numberOfVisits > $1.numberOfVisits })
+            users = objects.prefix(3).map { object in
+                User(name: object.username, age: object.age, isOnline: object.isOnline, avatarData: object.imageData)
+            }
+            
+            DispatchQueue.main.async { [weak self] in
+                self?.tableView.reloadData()
+            }
+            
         } catch {
             print(error)
+            return
         }
         
         if !users.isEmpty{
             return
         }
         
-        NetworkManager.shared.fetchUsers { users in
+        NetworkManager.shared.fetchUsers { [weak self] users in
             users.forEach { user in
-                let userInstance = UserModel()
-                userInstance.id = user.id
-                userInstance.sex = user.sex
-                userInstance.username = user.username
-                userInstance.isOnline = user.isOnline
-                userInstance.age = user.age
+                StorageManager.shared.createUser(id: user.id,
+                                                 sex: user.sex,
+                                                 username: user.username,
+                                                 isOnline: user.isOnline,
+                                                 age: user.age)
                 
-                userInstance.imageUrl = user.files.first(where: { $0.type == "avatar" })?.url
-                
-                do {
-                    let realm = try Realm()
-                    
-                    try realm.write {
-                        realm.add(userInstance)
+                if let imageUrl = user.files.first(where: { $0.type == "avatar" })?.url {
+                    NetworkManager.shared.fetchAvatarForUser(id: user.id, url: imageUrl) { data in
+                        StorageManager.shared.setImageData(id: user.id, data: data)
                     }
-                } catch {
-                    print(error)
                 }
             }
+            
+            self?.getUsers()
+            
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
         }
-        
-        
     }
 }
 
@@ -159,8 +162,10 @@ extension StatisticsViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let item = datasource[section]
-        
-        return item.childs?.count ?? item.users?.count ?? 1
+        if item.section == .topVisitors {
+            return users.count
+        }
+        return item.childs?.count ?? 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -180,12 +185,13 @@ extension StatisticsViewController {
             return cell
             
         case .topVisitors:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: UserCell.reuseIdentifier, for: indexPath) as? UserCell,
-                  let user = item.users?[indexPath.row] else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: UserCell.reuseIdentifier, for: indexPath) as? UserCell else {
                 return UITableViewCell(frame: .zero)
             }
             
-            cell.setup(title: user.name)
+            let user = users[indexPath.row]
+            
+            cell.setup(title: "\(user.name), \(user.age)", isOnline: user.isOnline, imageData: user.avatarData)
             cell.accessoryType = .disclosureIndicator
             
             return cell
@@ -303,6 +309,10 @@ extension StatisticsViewController {
         }
         
         return 50
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
