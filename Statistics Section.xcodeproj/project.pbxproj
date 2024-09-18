@@ -7,23 +7,49 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		644F2F3B2C99B26B008D6F83 /* PinLayout in Frameworks */ = {isa = PBXBuildFile; productRef = 644F2F3A2C99B26B008D6F83 /* PinLayout */; };
+		644F2F412C99D2D5008D6F83 /* VisitorsChartTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 644F2F402C99D2D5008D6F83 /* VisitorsChartTableViewCell.swift */; };
+		644F2F432C99E728008D6F83 /* VisitorsBigChartTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 644F2F422C99E728008D6F83 /* VisitorsBigChartTableViewCell.swift */; };
+		6454A74F2C9ADBA40040C22C /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6454A74E2C9ADBA40040C22C /* UserCell.swift */; };
+		6454A7572C9AEECC0040C22C /* ChartBySex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6454A7562C9AEECC0040C22C /* ChartBySex.swift */; };
+		6454A7592C9AF4DA0040C22C /* ChartBySexTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6454A7582C9AF4DA0040C22C /* ChartBySexTableViewCell.swift */; };
+		6454A75B2C9B07100040C22C /* ChartByAge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6454A75A2C9B07100040C22C /* ChartByAge.swift */; };
+		6454A75D2C9B1F460040C22C /* ChartByAgeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6454A75C2C9B1F460040C22C /* ChartByAgeTableViewCell.swift */; };
+		6454A76D2C9B35490040C22C /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6454A76C2C9B35490040C22C /* NetworkManager.swift */; };
+		6454A76F2C9B368C0040C22C /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6454A76E2C9B368C0040C22C /* UserModel.swift */; };
+		6454A77C2C9B4BF40040C22C /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6454A77B2C9B4BF40040C22C /* RealmSwift */; };
+		6454A77E2C9B4F8C0040C22C /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6454A77D2C9B4F8C0040C22C /* ChartView.swift */; };
+		6454A7802C9B53500040C22C /* BigChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6454A77F2C9B53500040C22C /* BigChartView.swift */; };
 		64725E182C988AF600EDECDE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64725E172C988AF600EDECDE /* AppDelegate.swift */; };
 		64725E1A2C988AF600EDECDE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64725E192C988AF600EDECDE /* SceneDelegate.swift */; };
-		64725E1C2C988AF600EDECDE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64725E1B2C988AF600EDECDE /* ViewController.swift */; };
-		64725E1F2C988AF600EDECDE /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 64725E1E2C988AF600EDECDE /* Base */; };
+		64725E1C2C988AF600EDECDE /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64725E1B2C988AF600EDECDE /* StatisticsViewController.swift */; };
 		64725E212C988AF800EDECDE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 64725E202C988AF800EDECDE /* Assets.xcassets */; };
 		64725E242C988AF800EDECDE /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 64725E232C988AF800EDECDE /* Base */; };
+		64725E2D2C98984D00EDECDE /* StackButtonsTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64725E2C2C98984D00EDECDE /* StackButtonsTableViewHeader.swift */; };
+		64725E302C989C8F00EDECDE /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64725E2F2C989C8F00EDECDE /* UIColor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		644F2F402C99D2D5008D6F83 /* VisitorsChartTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitorsChartTableViewCell.swift; sourceTree = "<group>"; };
+		644F2F422C99E728008D6F83 /* VisitorsBigChartTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitorsBigChartTableViewCell.swift; sourceTree = "<group>"; };
+		6454A74E2C9ADBA40040C22C /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
+		6454A7562C9AEECC0040C22C /* ChartBySex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartBySex.swift; sourceTree = "<group>"; };
+		6454A7582C9AF4DA0040C22C /* ChartBySexTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartBySexTableViewCell.swift; sourceTree = "<group>"; };
+		6454A75A2C9B07100040C22C /* ChartByAge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartByAge.swift; sourceTree = "<group>"; };
+		6454A75C2C9B1F460040C22C /* ChartByAgeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartByAgeTableViewCell.swift; sourceTree = "<group>"; };
+		6454A76C2C9B35490040C22C /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		6454A76E2C9B368C0040C22C /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		6454A77D2C9B4F8C0040C22C /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
+		6454A77F2C9B53500040C22C /* BigChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigChartView.swift; sourceTree = "<group>"; };
 		64725E142C988AF600EDECDE /* Statistics Section.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Statistics Section.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		64725E172C988AF600EDECDE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		64725E192C988AF600EDECDE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		64725E1B2C988AF600EDECDE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		64725E1E2C988AF600EDECDE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		64725E1B2C988AF600EDECDE /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		64725E202C988AF800EDECDE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		64725E232C988AF800EDECDE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		64725E252C988AF800EDECDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		64725E2C2C98984D00EDECDE /* StackButtonsTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackButtonsTableViewHeader.swift; sourceTree = "<group>"; };
+		64725E2F2C989C8F00EDECDE /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,17 +57,47 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6454A77C2C9B4BF40040C22C /* RealmSwift in Frameworks */,
+				644F2F3B2C99B26B008D6F83 /* PinLayout in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6454A7532C9AEE830040C22C /* SwiftUICharts */ = {
+			isa = PBXGroup;
+			children = (
+				6454A7562C9AEECC0040C22C /* ChartBySex.swift */,
+				6454A75A2C9B07100040C22C /* ChartByAge.swift */,
+				6454A77D2C9B4F8C0040C22C /* ChartView.swift */,
+				6454A77F2C9B53500040C22C /* BigChartView.swift */,
+			);
+			path = SwiftUICharts;
+			sourceTree = "<group>";
+		};
+		6454A76A2C9B34790040C22C /* framework */ = {
+			isa = PBXGroup;
+			children = (
+				6454A76C2C9B35490040C22C /* NetworkManager.swift */,
+				6454A76E2C9B368C0040C22C /* UserModel.swift */,
+			);
+			path = framework;
+			sourceTree = "<group>";
+		};
+		6454A7732C9B46320040C22C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		64725E0B2C988AF600EDECDE = {
 			isa = PBXGroup;
 			children = (
 				64725E162C988AF600EDECDE /* Statistics Section */,
 				64725E152C988AF600EDECDE /* Products */,
+				6454A7732C9B46320040C22C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -56,15 +112,39 @@
 		64725E162C988AF600EDECDE /* Statistics Section */ = {
 			isa = PBXGroup;
 			children = (
+				6454A76A2C9B34790040C22C /* framework */,
+				64725E2E2C989C6F00EDECDE /* Extensions */,
+				64725E2B2C98946700EDECDE /* Cells */,
 				64725E172C988AF600EDECDE /* AppDelegate.swift */,
 				64725E192C988AF600EDECDE /* SceneDelegate.swift */,
-				64725E1B2C988AF600EDECDE /* ViewController.swift */,
-				64725E1D2C988AF600EDECDE /* Main.storyboard */,
+				64725E1B2C988AF600EDECDE /* StatisticsViewController.swift */,
+				6454A7532C9AEE830040C22C /* SwiftUICharts */,
 				64725E202C988AF800EDECDE /* Assets.xcassets */,
 				64725E222C988AF800EDECDE /* LaunchScreen.storyboard */,
 				64725E252C988AF800EDECDE /* Info.plist */,
 			);
 			path = "Statistics Section";
+			sourceTree = "<group>";
+		};
+		64725E2B2C98946700EDECDE /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				64725E2C2C98984D00EDECDE /* StackButtonsTableViewHeader.swift */,
+				644F2F402C99D2D5008D6F83 /* VisitorsChartTableViewCell.swift */,
+				644F2F422C99E728008D6F83 /* VisitorsBigChartTableViewCell.swift */,
+				6454A74E2C9ADBA40040C22C /* UserCell.swift */,
+				6454A7582C9AF4DA0040C22C /* ChartBySexTableViewCell.swift */,
+				6454A75C2C9B1F460040C22C /* ChartByAgeTableViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		64725E2E2C989C6F00EDECDE /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				64725E2F2C989C8F00EDECDE /* UIColor.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -83,6 +163,10 @@
 			dependencies = (
 			);
 			name = "Statistics Section";
+			packageProductDependencies = (
+				644F2F3A2C99B26B008D6F83 /* PinLayout */,
+				6454A77B2C9B4BF40040C22C /* RealmSwift */,
+			);
 			productName = "Statistics Section";
 			productReference = 64725E142C988AF600EDECDE /* Statistics Section.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +195,10 @@
 				Base,
 			);
 			mainGroup = 64725E0B2C988AF600EDECDE;
+			packageReferences = (
+				644F2F392C99B26B008D6F83 /* XCRemoteSwiftPackageReference "PinLayout" */,
+				6454A77A2C9B4BF40040C22C /* XCRemoteSwiftPackageReference "realm-swift" */,
+			);
 			productRefGroup = 64725E152C988AF600EDECDE /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -127,7 +215,6 @@
 			files = (
 				64725E212C988AF800EDECDE /* Assets.xcassets in Resources */,
 				64725E242C988AF800EDECDE /* Base in Resources */,
-				64725E1F2C988AF600EDECDE /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,23 +225,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				64725E1C2C988AF600EDECDE /* ViewController.swift in Sources */,
+				6454A7592C9AF4DA0040C22C /* ChartBySexTableViewCell.swift in Sources */,
+				644F2F432C99E728008D6F83 /* VisitorsBigChartTableViewCell.swift in Sources */,
+				64725E1C2C988AF600EDECDE /* StatisticsViewController.swift in Sources */,
+				6454A75D2C9B1F460040C22C /* ChartByAgeTableViewCell.swift in Sources */,
+				64725E302C989C8F00EDECDE /* UIColor.swift in Sources */,
 				64725E182C988AF600EDECDE /* AppDelegate.swift in Sources */,
 				64725E1A2C988AF600EDECDE /* SceneDelegate.swift in Sources */,
+				64725E2D2C98984D00EDECDE /* StackButtonsTableViewHeader.swift in Sources */,
+				6454A77E2C9B4F8C0040C22C /* ChartView.swift in Sources */,
+				6454A76D2C9B35490040C22C /* NetworkManager.swift in Sources */,
+				6454A75B2C9B07100040C22C /* ChartByAge.swift in Sources */,
+				6454A7572C9AEECC0040C22C /* ChartBySex.swift in Sources */,
+				6454A7802C9B53500040C22C /* BigChartView.swift in Sources */,
+				644F2F412C99D2D5008D6F83 /* VisitorsChartTableViewCell.swift in Sources */,
+				6454A76F2C9B368C0040C22C /* UserModel.swift in Sources */,
+				6454A74F2C9ADBA40040C22C /* UserCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		64725E1D2C988AF600EDECDE /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				64725E1E2C988AF600EDECDE /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		64725E222C988AF800EDECDE /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -296,7 +388,6 @@
 				INFOPLIST_FILE = "Statistics Section/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -323,7 +414,6 @@
 				INFOPLIST_FILE = "Statistics Section/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -361,6 +451,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		644F2F392C99B26B008D6F83 /* XCRemoteSwiftPackageReference "PinLayout" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/layoutBox/PinLayout";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.10.5;
+			};
+		};
+		6454A77A2C9B4BF40040C22C /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		644F2F3A2C99B26B008D6F83 /* PinLayout */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 644F2F392C99B26B008D6F83 /* XCRemoteSwiftPackageReference "PinLayout" */;
+			productName = PinLayout;
+		};
+		6454A77B2C9B4BF40040C22C /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6454A77A2C9B4BF40040C22C /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 64725E0C2C988AF600EDECDE /* Project object */;
 }
