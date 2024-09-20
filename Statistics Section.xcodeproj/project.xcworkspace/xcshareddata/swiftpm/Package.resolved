@@ -1,5 +1,5 @@
 {
-  "originHash" : "53271276ea0a228d482927d2ca9245664b2e1577be1978c97f61c7148e56358d",
+  "originHash" : "f015b9c1895c1af185cf6a75e2b8a196fb24c4cd8e553627fc6147d40f5081d1",
   "pins" : [
     {
       "identity" : "pinlayout",
@@ -24,8 +24,26 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/realm/realm-swift.git",
       "state" : {
-        "branch" : "master",
-        "revision" : "5dc1f4ba002f90c81a271d85a276267d4de786af"
+        "revision" : "9b9992d59a5148eb557e6c0445fec05009022c8c",
+        "version" : "10.53.1"
+      }
+    },
+    {
+      "identity" : "rxrealm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/RxSwiftCommunity/RxRealm.git",
+      "state" : {
+        "branch" : "feature/remove-realm-link",
+        "revision" : "825b1b1018d7c3bf290c940ca6c840162a12369e"
+      }
+    },
+    {
+      "identity" : "rxswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ReactiveX/RxSwift.git",
+      "state" : {
+        "revision" : "b06a8c8596e4c3e8e7788e08e720e3248563ce6a",
+        "version" : "6.7.1"
       }
     }
   ],
