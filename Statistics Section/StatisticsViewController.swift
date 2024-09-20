@@ -26,13 +26,15 @@ class StatisticsViewController: UITableViewController {
         var childs: [Cell]?
         var users: [User]?
         var headerButtonTitles: [String]?
+        var rowSize: CGFloat?
         
-        init(title: String? = nil, section: Sections? = nil, childs: [Cell]? = nil, users: [User]? = nil, headerButtonTitles: [String]? = nil) {
+        init(title: String? = nil, section: Sections? = nil, childs: [Cell]? = nil, users: [User]? = nil, headerButtonTitles: [String]? = nil, rowSize: CGFloat? = nil) {
             self.title = title
             self.section = section
             self.childs = childs
             self.users = users
             self.headerButtonTitles = headerButtonTitles
+            self.rowSize = rowSize
         }
     }
     
@@ -56,10 +58,39 @@ class StatisticsViewController: UITableViewController {
     
     var users: [User] = []
     
+    // Double - timestamp from date (every date in month); Int - count of visits each day
+    var visitStatistics = [Double: Int]()
+    var subscriptionStatistics = [Double: Int]()
+    var unsubscriptionStatistics = [Double: Int]()
+    
+    // (<count in this month>, <count in last month>)
+    var totalVisits = (0, 0)
+    
+    var totalSubscriptions = 0
+    var totalUnsubscription = 0
+    
+    var maleVisitorsAge = [Int]()
+    var femaleVisitorsAge = [Int]()
+    
     init() {
         super.init(style: .insetGrouped)
         
         tableView.register(UserCell.self, forCellReuseIdentifier: UserCell.reuseIdentifier)
+        
+        // Initializing dictionary in format "date.timestamp: count" to record the number of events in each day
+        DispatchQueue.global().async { [weak self] in
+            guard let dict = self?.getDaysOfMonth() else { return }
+            
+            self?.visitStatistics = dict
+            self?.subscriptionStatistics = dict
+            self?.unsubscriptionStatistics = dict
+            
+            
+            
+//            DispatchQueue.main.async {
+//                self?.tableView.reloadData()
+//            }
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -74,28 +105,31 @@ class StatisticsViewController: UITableViewController {
     }
 
     func loadData() {
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.getUsers()
+        // Load users and statistics in background
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            self?.getUsers()
+            self?.getStatistics()
         }
         
+        // Creating a table structure
         datasource = [
             Cell(title: "Посетители", childs: [
-                Cell(title: nil, section: .visitors)
+                Cell(title: nil, section: .visitors, rowSize: 90)
             ]),
             
             Cell(title: nil, childs: [
-                Cell(section: .visitorsChart)
+                Cell(section: .visitorsChart, rowSize: 208)
             ], headerButtonTitles: [
                 "По дням",
                 "По неделям",
                 "По месяцам"
             ]),
             
-            Cell(title: "Чаще всех посещают Ваш профиль", section: .topVisitors),
+            Cell(title: "Чаще всех посещают Ваш профиль", section: .topVisitors, rowSize: 60),
             
             Cell(title: "Пол и возраст", childs: [
-                Cell(section: .chartBySex),
-                Cell(section: .chartByAge)
+                Cell(section: .chartBySex, rowSize: 230),
+                Cell(section: .chartByAge, rowSize: 300)
             ], headerButtonTitles: [
                 "Сегодня",
                 "Неделя",
@@ -104,8 +138,8 @@ class StatisticsViewController: UITableViewController {
             ]),
             
             Cell(title: "Наблюдатели", childs: [
-                Cell(section: .subscribers),
-                Cell(section: .unsubscribers)
+                Cell(section: .subscribers, rowSize: 90),
+                Cell(section: .unsubscribers, rowSize: 90)
             ])
         ]
     }
@@ -113,7 +147,7 @@ class StatisticsViewController: UITableViewController {
     func getUsers() {
         do {
             let realm = try Realm()
-            let objects = realm.objects(UserModel.self).sorted(by: { $0.numberOfVisits > $1.numberOfVisits })
+            let objects = realm.objects(UserModel.self).sorted(by: { $0.listVisitTimestamps.count > $1.listVisitTimestamps.count })
             users = objects.prefix(3).map { object in
                 User(name: object.username, age: object.age, isOnline: object.isOnline, avatarData: object.imageData)
             }
@@ -142,6 +176,12 @@ class StatisticsViewController: UITableViewController {
                 if let imageUrl = user.files.first(where: { $0.type == "avatar" })?.url {
                     NetworkManager.shared.fetchAvatarForUser(id: user.id, url: imageUrl) { data in
                         StorageManager.shared.setImageData(id: user.id, data: data)
+                        
+                        self?.getUsers()
+                        
+                        DispatchQueue.main.async { [weak self] in
+                            self?.tableView.reloadData()
+                        }
                     }
                 }
             }
@@ -152,6 +192,114 @@ class StatisticsViewController: UITableViewController {
                 self?.tableView.reloadData()
             }
         }
+    }
+    
+    func getStatistics() {
+        do {
+            let realm = try Realm()
+            let visitStatisticsInstance = realm.objects(StatisticsModel.self).filter("type == %@", StatisticsModel.EventType.visit.rawValue)
+            visitStatisticsInstance.forEach { item in
+                item.listTimestamps.forEach { timestamp in
+                    visitStatistics[timestamp]? += 1
+                    
+                    let date = Date(timeIntervalSince1970: timestamp)
+                    if isDateInCurrentMonth(date) {
+                        totalVisits.0 += 1
+                    } else if isDateInPreviousMonth(date) {
+                        totalVisits.1 += 1
+                    }
+                }
+                
+                if let userInstance = realm.object(ofType: UserModel.self, forPrimaryKey: item.userId) {
+                    if userInstance.sex == "M" {
+                        maleVisitorsAge.append(userInstance.age)
+                    } else {
+                        femaleVisitorsAge.append(userInstance.age)
+                    }
+                }
+            }
+            
+            let subscribeStatisticsInstance = realm.objects(StatisticsModel.self).filter("type == %@", StatisticsModel.EventType.subscription.rawValue)
+            subscribeStatisticsInstance.forEach { item in
+                item.listTimestamps.forEach { timestamp in
+                    subscriptionStatistics[timestamp]? += 1
+                    
+                    let date = Date(timeIntervalSince1970: timestamp)
+                    if isDateInCurrentMonth(date) {
+                        totalSubscriptions += 1
+                    }
+                }
+            }
+            
+            let unsubscribeStatisticsInstance = realm.objects(StatisticsModel.self).filter("type == %@", StatisticsModel.EventType.unsubscription.rawValue)
+            unsubscribeStatisticsInstance.forEach { item in
+                item.listTimestamps.forEach { timestamp in
+                    unsubscriptionStatistics[timestamp]? += 1
+                    
+                    let date = Date(timeIntervalSince1970: timestamp)
+                    if isDateInCurrentMonth(date) {
+                        totalUnsubscription += 1
+                    }
+                }
+            }
+            
+            if visitStatisticsInstance.isEmpty && subscribeStatisticsInstance.isEmpty && unsubscribeStatisticsInstance.isEmpty {
+                NetworkManager.shared.fetchStatistics { [weak self] objects in
+                    objects.forEach { object in
+                        StorageManager.shared.createStatisticsInstance(userId: object.user_id, type: object.type, listDatesRaw: object.dates)
+                    }
+                    
+                    self?.getStatistics()
+                }
+            } else {
+                DispatchQueue.main.async { [weak self] in
+                    self?.tableView.reloadData()
+                }
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
+    func getDaysOfMonth() -> [Double: Int] {
+        let now = Date()
+        
+        var calendar = Calendar.current
+        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        
+        let monthRange = calendar.range(of: .day, in: .month, for: now) ?? 1..<30
+        let components = calendar.dateComponents([.year, .month], from: now)
+        var date = calendar.date(from: components)
+        
+        var dictionary: [Double: Int] = [:]
+        
+        for _ in monthRange {
+            dictionary[date!.timeIntervalSince1970] = 0
+            date = calendar.date(byAdding: .day, value: 1, to: date!)
+        }
+        
+        return dictionary
+    }
+    
+    func isDateInCurrentMonth(_ date: Date) -> Bool {
+        let calendar = Calendar.current
+        let currentDateComponents = calendar.dateComponents([.year, .month], from: Date())
+        
+        let givenDateComponents = calendar.dateComponents([.year, .month], from: date)
+        
+        return currentDateComponents.year == givenDateComponents.year && currentDateComponents.month == givenDateComponents.month
+    }
+    
+    func isDateInPreviousMonth(_ date: Date) -> Bool {
+        let calendar = Calendar.current
+        let currentDate = Date()
+        
+        let previousMonthDate = calendar.date(byAdding: .month, value: -1, to: currentDate)!
+        let previousMonthComponents = calendar.dateComponents([.year, .month], from: previousMonthDate)
+        
+        let givenDateComponents = calendar.dateComponents([.year, .month], from: date)
+        
+        return previousMonthComponents.year == givenDateComponents.year && previousMonthComponents.month == givenDateComponents.month
     }
 }
 
@@ -174,13 +322,13 @@ extension StatisticsViewController {
         switch item.section {
         case .visitors:
             let cell = VisitorsSmallChartTableViewCell()
-            cell.setup(text: "Количество посетителей в этом месяце выросло", count: "1356", color: .green)
+            cell.setup(text: "Количество посетителей в этом месяце \(totalVisits.0 > totalVisits.1 ? "выросло" : "упало")", count: String(totalVisits.0), color: .green, data: visitStatistics)
             
             return cell
             
         case .visitorsChart:
             let cell = VisitorsBigChartTableViewCell()
-            cell.setup()
+            cell.setup(data: visitStatistics)
             
             return cell
             
@@ -198,25 +346,25 @@ extension StatisticsViewController {
             
         case .chartBySex:
             let cell = ChartBySexTableViewCell()
-            cell.setup()
+            cell.setup(maleCount: maleVisitorsAge.count, femaleCount: femaleVisitorsAge.count)
             
             return cell
             
         case .chartByAge:
             let cell = ChartByAgeTableViewCell()
-            cell.setup()
+            cell.setup(maleAges: maleVisitorsAge, femaleAges: femaleVisitorsAge)
             
             return cell
             
         case .subscribers:
             let cell = VisitorsSmallChartTableViewCell()
-            cell.setup(text: "text", count: "count", color: .green)
+            cell.setup(text: "Новые наблюдатели в этом месяце", count: String(totalSubscriptions), color: .green, data: subscriptionStatistics)
             
             return cell
             
         case .unsubscribers:
             let cell = VisitorsSmallChartTableViewCell()
-            cell.setup(text: "text", count: "count", color: .red)
+            cell.setup(text: "Пользователей перестали за Вами наблюдать", count: String(totalUnsubscription), color: .red, data: unsubscriptionStatistics)
             
             return cell
             
@@ -232,20 +380,21 @@ extension StatisticsViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let item = datasource[indexPath.section].childs?[indexPath.row] ?? datasource[indexPath.section]
         
-        switch item.section {
-        case .visitors, .subscribers, .unsubscribers:
-            return 90
-        case .visitorsChart:
-            return 208
-        case .topVisitors:
-            return 60
-        case .chartBySex:
-            return 230
-        case .chartByAge:
-            return 300
-        default:
-            return tableView.estimatedRowHeight
-        }
+        return item.rowSize ?? tableView.estimatedRowHeight
+//        switch item.section {
+//        case .visitors, .subscribers, .unsubscribers:
+//            return 90
+//        case .visitorsChart:
+//            return 208
+//        case .topVisitors:
+//            return 60
+//        case .chartBySex:
+//            return 230
+//        case .chartByAge:
+//            return 300
+//        default:
+//            return tableView.estimatedRowHeight
+//        }
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

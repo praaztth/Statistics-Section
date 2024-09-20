@@ -18,17 +18,12 @@ struct ChartView: View {
     
     var color: Color
     
-    init(color: Color) {
+    init(color: Color, data: [Double: Int]) {
         self.color = color
+        self.data = data.map { ChartData(date: Date(timeIntervalSince1970: $0.key), count: $0.value) }.sorted { $0.date < $1.date }
     }
     
-    var data: [ChartData] = [
-        ChartData(date: Calendar.current.date(byAdding: .day, value: -2, to: Date())!, count: 15),
-        ChartData(date: Calendar.current.date(byAdding: .day, value: -1, to: Date())!, count: 8),
-        ChartData(date: Date(), count: 13),
-        ChartData(date: Calendar.current.date(byAdding: .day, value: 1, to: Date())!, count: 12),
-        ChartData(date: Calendar.current.date(byAdding: .day, value: 2, to: Date())!, count: 5)
-    ]
+    var data: [ChartData]
     
     var body: some View {
         Chart {
@@ -54,5 +49,5 @@ struct ChartView: View {
 }
 
 #Preview {
-    ChartView(color: .green)
+    ChartView(color: .green, data: [2034985230: 0, 54323545: 1])
 }

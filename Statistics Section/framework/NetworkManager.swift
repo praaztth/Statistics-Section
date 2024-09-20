@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-struct Responce: Decodable {
+struct UsersResponce: Decodable {
     var users: [UserJson]
 }
 
@@ -27,8 +27,19 @@ struct File: Decodable {
     var type: String
 }
 
+struct StatisticsResponce: Decodable {
+    var statistics: [Statistic]
+}
+        
+struct Statistic: Decodable {
+    var user_id: Int
+    var type: String
+    var dates: [Int]
+}
+
 class NetworkManager {
     static let usersUrl = "https://cars.cprogroup.ru/api/episode/users/"
+    static let statisticsUrl = "https://cars.cprogroup.ru/api/episode/statistics/"
     
     static let shared = NetworkManager()
     
@@ -39,7 +50,7 @@ class NetworkManager {
             guard let data = data, error == nil else { return }
             
             do {
-                let responce: Responce = try JSONDecoder().decode(Responce.self, from: data)
+                let responce: UsersResponce = try JSONDecoder().decode(UsersResponce.self, from: data)
                 
                 completion(responce.users)
             } catch {
@@ -57,5 +68,21 @@ class NetworkManager {
             completion(data)
         }.resume()
         
+    }
+    
+    func fetchStatistics(completion: @escaping ([Statistic]) -> Void) {
+        guard let url = URL(string: NetworkManager.statisticsUrl) else { return }
+        
+        URLSession.shared.dataTask(with: url) { data, responce, error in
+            guard let data = data, error == nil else { return }
+            
+            do {
+                let responce: StatisticsResponce = try JSONDecoder().decode(StatisticsResponce.self, from: data)
+                
+                completion(responce.statistics)
+            } catch {
+                print(error)
+            }
+        }.resume()
     }
 }

@@ -52,7 +52,7 @@ class UserCell: UITableViewCell {
         if let imageData = imageData {
             avatarView.image = UIImage(data: imageData)
         } else {
-            avatarView.image = UIImage(systemName: "trash.slash.square.fill")
+            avatarView.image = UIImage(systemName: "person.fill")
         }
         
         if isOnline {

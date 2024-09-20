@@ -9,8 +9,8 @@ import UIKit
 import SwiftUI
 
 class ChartByAgeTableViewCell: UITableViewCell {
-    func setup() {
-        let chart = ChartByAge()
+    func setup(maleAges: [Int], femaleAges: [Int]) {
+        let chart = ChartByAge(maleAges: maleAges, femaleAges: femaleAges)
         let hostringController = UIHostingController(rootView: chart)
         
         contentView.addSubview(hostringController.view)

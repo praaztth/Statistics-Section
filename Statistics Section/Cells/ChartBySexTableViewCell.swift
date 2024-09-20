@@ -9,8 +9,8 @@ import UIKit
 import SwiftUI
 
 class ChartBySexTableViewCell: UITableViewCell {
-    func setup() {
-        let chart = ChartBySex()
+    func setup(maleCount: Int, femaleCount: Int) {
+        let chart = ChartBySex(maleCount: maleCount, femaleCount: femaleCount)
         let hostringController = UIHostingController(rootView: chart)
         
         contentView.addSubview(hostringController.view)
@@ -21,7 +21,7 @@ class ChartBySexTableViewCell: UITableViewCell {
 
 #Preview {
     let cell = ChartBySexTableViewCell()
-    cell.setup()
+    cell.setup(maleCount: 5, femaleCount: 10)
     
     return cell
 }

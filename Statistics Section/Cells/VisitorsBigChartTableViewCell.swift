@@ -28,8 +28,8 @@ class VisitorsBigChartTableViewCell: UITableViewCell {
     }()
     
     
-    func setup() {
-        let chartView = BigChartView()
+    func setup(data: [Double: Int]) {
+        let chartView = BigChartView(data: data)
         let hostingController = UIHostingController(rootView: chartView)
         
         contentView.addSubview(hostingController.view)

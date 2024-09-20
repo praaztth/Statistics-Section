@@ -28,8 +28,8 @@ class VisitorsSmallChartTableViewCell: UITableViewCell {
     }()
     
     
-    func setup(text: String, count: String, color: Color) {
-        let chartView = ChartView(color: color)
+    func setup(text: String, count: String, color: Color, data: [Double: Int]) {
+        let chartView = ChartView(color: color, data: data)
         let hostingController = UIHostingController(rootView: chartView)
         
         contentView.addSubview(hostingController.view)

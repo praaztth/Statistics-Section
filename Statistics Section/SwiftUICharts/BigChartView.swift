@@ -15,13 +15,11 @@ struct BigChartView: View {
         var count: Int
     }
     
-    var data: [ChartData] = [
-        ChartData(date: Calendar.current.date(byAdding: .day, value: -2, to: Date())!, count: 15),
-        ChartData(date: Calendar.current.date(byAdding: .day, value: -1, to: Date())!, count: 8),
-        ChartData(date: Date(), count: 13),
-        ChartData(date: Calendar.current.date(byAdding: .day, value: 1, to: Date())!, count: 12),
-        ChartData(date: Calendar.current.date(byAdding: .day, value: 2, to: Date())!, count: 5)
-    ]
+    var data: [ChartData]
+    
+    init(data: [Double: Int]) {
+        self.data = data.map { ChartData(date: Date(timeIntervalSince1970: $0.key), count: $0.value)}.sorted { $0.date < $1.date }
+    }
     
     var body: some View {
         Chart {
@@ -29,15 +27,18 @@ struct BigChartView: View {
                 LineMark(x: .value("Date", item.date), y: .value("Count", item.count))
                     .lineStyle(.init(lineWidth: 3))
                     .foregroundStyle(.red)
-                PointMark(x: .value("Date", item.date), y: .value("Count", item.count))
-                    .symbol(Circle())
-                    .symbolSize(100)
-                    .foregroundStyle(.red)
+                if item.count != 0 {
+                    PointMark(x: .value("Date", item.date), y: .value("Count", item.count))
+                        .symbol(Circle())
+                        .symbolSize(100)
+                        .foregroundStyle(.red)
+                }
+                
             }
         }
     }
 }
 
 #Preview {
-    BigChartView()
+    BigChartView(data: [234234234: 3, 2342343: 6])
 }
