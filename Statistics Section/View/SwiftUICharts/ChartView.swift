@@ -10,17 +10,17 @@ import Charts
 import UIKit
 
 struct ChartView: View {
-    struct ChartData: Identifiable {
-        var id = UUID()
-        var date: Date
-        var count: Int
-    }
+//    struct ChartData: Identifiable {
+//        var id = UUID()
+//        var date: Date
+//        var count: Int
+//    }
     
     var color: Color
     
-    init(color: Color, data: [Double: Int]) {
+    init(color: Color, data: [ChartData]) {
         self.color = color
-        self.data = data.map { ChartData(date: Date(timeIntervalSince1970: $0.key), count: $0.value) }.sorted { $0.date < $1.date }
+        self.data = data
     }
     
     var data: [ChartData]
@@ -49,5 +49,5 @@ struct ChartView: View {
 }
 
 #Preview {
-    ChartView(color: .green, data: [2034985230: 0, 54323545: 1])
+    ChartView(color: .green, data: [ChartData(date: Date(), count: 7)])
 }

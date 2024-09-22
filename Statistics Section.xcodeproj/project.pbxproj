@@ -10,7 +10,7 @@
 		640060372C9B622700260DA0 /* PinLayout in Frameworks */ = {isa = PBXBuildFile; productRef = 640060362C9B622700260DA0 /* PinLayout */; };
 		6400603C2C9B89F300260DA0 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6400603B2C9B89F300260DA0 /* StorageManager.swift */; };
 		644052982C9DE7F90021932F /* RxRealm in Frameworks */ = {isa = PBXBuildFile; productRef = 644052972C9DE7F90021932F /* RxRealm */; };
-		644F2F412C99D2D5008D6F83 /* VisitorsChartTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 644F2F402C99D2D5008D6F83 /* VisitorsChartTableViewCell.swift */; };
+		644F2F412C99D2D5008D6F83 /* SmallChartTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 644F2F402C99D2D5008D6F83 /* SmallChartTableViewCell.swift */; };
 		644F2F432C99E728008D6F83 /* VisitorsBigChartTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 644F2F422C99E728008D6F83 /* VisitorsBigChartTableViewCell.swift */; };
 		6454A74F2C9ADBA40040C22C /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6454A74E2C9ADBA40040C22C /* UserCell.swift */; };
 		6454A7572C9AEECC0040C22C /* ChartBySex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6454A7562C9AEECC0040C22C /* ChartBySex.swift */; };
@@ -21,6 +21,12 @@
 		6454A76F2C9B368C0040C22C /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6454A76E2C9B368C0040C22C /* UserModel.swift */; };
 		6454A77E2C9B4F8C0040C22C /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6454A77D2C9B4F8C0040C22C /* ChartView.swift */; };
 		6454A7802C9B53500040C22C /* BigChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6454A77F2C9B53500040C22C /* BigChartView.swift */; };
+		645BCEF22C9F615E00B6B2DC /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645BCEF12C9F615E00B6B2DC /* DataService.swift */; };
+		645BCEF52C9F70F500B6B2DC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645BCEF42C9F70F500B6B2DC /* Constants.swift */; };
+		645BCEF72C9F73CE00B6B2DC /* SmallChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645BCEF62C9F73CE00B6B2DC /* SmallChartViewController.swift */; };
+		645BCEF92C9F7DCC00B6B2DC /* VisitorsChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645BCEF82C9F7DCC00B6B2DC /* VisitorsChartViewController.swift */; };
+		646F085E2CA039330003140B /* ChartBySexViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 646F085D2CA039330003140B /* ChartBySexViewController.swift */; };
+		646F08602CA03D4C0003140B /* ChartByAgeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 646F085F2CA03D4C0003140B /* ChartByAgeViewController.swift */; };
 		64725E182C988AF600EDECDE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64725E172C988AF600EDECDE /* AppDelegate.swift */; };
 		64725E1A2C988AF600EDECDE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64725E192C988AF600EDECDE /* SceneDelegate.swift */; };
 		64725E1C2C988AF600EDECDE /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64725E1B2C988AF600EDECDE /* StatisticsViewController.swift */; };
@@ -46,7 +52,7 @@
 
 /* Begin PBXFileReference section */
 		6400603B2C9B89F300260DA0 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
-		644F2F402C99D2D5008D6F83 /* VisitorsChartTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitorsChartTableViewCell.swift; sourceTree = "<group>"; };
+		644F2F402C99D2D5008D6F83 /* SmallChartTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallChartTableViewCell.swift; sourceTree = "<group>"; };
 		644F2F422C99E728008D6F83 /* VisitorsBigChartTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitorsBigChartTableViewCell.swift; sourceTree = "<group>"; };
 		6454A74E2C9ADBA40040C22C /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		6454A7562C9AEECC0040C22C /* ChartBySex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartBySex.swift; sourceTree = "<group>"; };
@@ -57,6 +63,12 @@
 		6454A76E2C9B368C0040C22C /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		6454A77D2C9B4F8C0040C22C /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
 		6454A77F2C9B53500040C22C /* BigChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigChartView.swift; sourceTree = "<group>"; };
+		645BCEF12C9F615E00B6B2DC /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
+		645BCEF42C9F70F500B6B2DC /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		645BCEF62C9F73CE00B6B2DC /* SmallChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallChartViewController.swift; sourceTree = "<group>"; };
+		645BCEF82C9F7DCC00B6B2DC /* VisitorsChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitorsChartViewController.swift; sourceTree = "<group>"; };
+		646F085D2CA039330003140B /* ChartBySexViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartBySexViewController.swift; sourceTree = "<group>"; };
+		646F085F2CA03D4C0003140B /* ChartByAgeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartByAgeViewController.swift; sourceTree = "<group>"; };
 		64725E142C988AF600EDECDE /* Statistics Section.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Statistics Section.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		64725E172C988AF600EDECDE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		64725E192C988AF600EDECDE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -100,6 +112,8 @@
 				6454A76E2C9B368C0040C22C /* UserModel.swift */,
 				6400603B2C9B89F300260DA0 /* StorageManager.swift */,
 				64E9848D2C9C4BC500A3E358 /* StatisticsModel.swift */,
+				645BCEF12C9F615E00B6B2DC /* DataService.swift */,
+				645BCEF42C9F70F500B6B2DC /* Constants.swift */,
 			);
 			path = framework;
 			sourceTree = "<group>";
@@ -109,6 +123,18 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		645BCEF32C9F671800B6B2DC /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				64725E1B2C988AF600EDECDE /* StatisticsViewController.swift */,
+				645BCEF62C9F73CE00B6B2DC /* SmallChartViewController.swift */,
+				645BCEF82C9F7DCC00B6B2DC /* VisitorsChartViewController.swift */,
+				646F085D2CA039330003140B /* ChartBySexViewController.swift */,
+				646F085F2CA03D4C0003140B /* ChartByAgeViewController.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		64725E0B2C988AF600EDECDE = {
@@ -133,11 +159,10 @@
 			children = (
 				6454A76A2C9B34790040C22C /* framework */,
 				64725E2E2C989C6F00EDECDE /* Extensions */,
-				64725E2B2C98946700EDECDE /* Cells */,
+				64725E2B2C98946700EDECDE /* View */,
 				64725E172C988AF600EDECDE /* AppDelegate.swift */,
 				64725E192C988AF600EDECDE /* SceneDelegate.swift */,
-				64725E1B2C988AF600EDECDE /* StatisticsViewController.swift */,
-				6454A7532C9AEE830040C22C /* SwiftUICharts */,
+				645BCEF32C9F671800B6B2DC /* Controller */,
 				64725E202C988AF800EDECDE /* Assets.xcassets */,
 				64725E222C988AF800EDECDE /* LaunchScreen.storyboard */,
 				64725E252C988AF800EDECDE /* Info.plist */,
@@ -145,17 +170,18 @@
 			path = "Statistics Section";
 			sourceTree = "<group>";
 		};
-		64725E2B2C98946700EDECDE /* Cells */ = {
+		64725E2B2C98946700EDECDE /* View */ = {
 			isa = PBXGroup;
 			children = (
+				6454A7532C9AEE830040C22C /* SwiftUICharts */,
 				64725E2C2C98984D00EDECDE /* StackButtonsTableViewHeader.swift */,
-				644F2F402C99D2D5008D6F83 /* VisitorsChartTableViewCell.swift */,
+				644F2F402C99D2D5008D6F83 /* SmallChartTableViewCell.swift */,
 				644F2F422C99E728008D6F83 /* VisitorsBigChartTableViewCell.swift */,
 				6454A74E2C9ADBA40040C22C /* UserCell.swift */,
 				6454A7582C9AF4DA0040C22C /* ChartBySexTableViewCell.swift */,
 				6454A75C2C9B1F460040C22C /* ChartByAgeTableViewCell.swift */,
 			);
-			path = Cells;
+			path = View;
 			sourceTree = "<group>";
 		};
 		64725E2E2C989C6F00EDECDE /* Extensions */ = {
@@ -247,20 +273,26 @@
 			files = (
 				6400603C2C9B89F300260DA0 /* StorageManager.swift in Sources */,
 				6454A7592C9AF4DA0040C22C /* ChartBySexTableViewCell.swift in Sources */,
+				646F08602CA03D4C0003140B /* ChartByAgeViewController.swift in Sources */,
 				644F2F432C99E728008D6F83 /* VisitorsBigChartTableViewCell.swift in Sources */,
 				64725E1C2C988AF600EDECDE /* StatisticsViewController.swift in Sources */,
 				6454A75D2C9B1F460040C22C /* ChartByAgeTableViewCell.swift in Sources */,
 				64725E302C989C8F00EDECDE /* UIColor.swift in Sources */,
+				645BCEF22C9F615E00B6B2DC /* DataService.swift in Sources */,
 				64725E182C988AF600EDECDE /* AppDelegate.swift in Sources */,
 				64725E1A2C988AF600EDECDE /* SceneDelegate.swift in Sources */,
 				64725E2D2C98984D00EDECDE /* StackButtonsTableViewHeader.swift in Sources */,
+				645BCEF72C9F73CE00B6B2DC /* SmallChartViewController.swift in Sources */,
 				6454A77E2C9B4F8C0040C22C /* ChartView.swift in Sources */,
 				6454A76D2C9B35490040C22C /* NetworkManager.swift in Sources */,
 				6454A75B2C9B07100040C22C /* ChartByAge.swift in Sources */,
 				6454A7572C9AEECC0040C22C /* ChartBySex.swift in Sources */,
 				6454A7802C9B53500040C22C /* BigChartView.swift in Sources */,
+				645BCEF92C9F7DCC00B6B2DC /* VisitorsChartViewController.swift in Sources */,
+				646F085E2CA039330003140B /* ChartBySexViewController.swift in Sources */,
+				645BCEF52C9F70F500B6B2DC /* Constants.swift in Sources */,
 				64E9848E2C9C4BC500A3E358 /* StatisticsModel.swift in Sources */,
-				644F2F412C99D2D5008D6F83 /* VisitorsChartTableViewCell.swift in Sources */,
+				644F2F412C99D2D5008D6F83 /* SmallChartTableViewCell.swift in Sources */,
 				6454A76F2C9B368C0040C22C /* UserModel.swift in Sources */,
 				6454A74F2C9ADBA40040C22C /* UserCell.swift in Sources */,
 			);

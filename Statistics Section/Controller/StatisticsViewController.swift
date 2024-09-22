@@ -64,24 +64,14 @@ class StatisticsViewController: UITableViewController {
     
     var users: [User] = []
     
-    // Double - timestamp from date (every date in month); Int - count of visits each day
-    var visitStatisticsSmallChart = [Double: Int]()
-    var visitStatisticsBigChart = [Double: Int]()
-    var subscriptionStatistics = [Double: Int]()
-    var unsubscriptionStatistics = [Double: Int]()
-    
     // (<count in this month>, <count in last month>)
     var totalVisits = (0, 0)
     
     var totalSubscriptions = 0
     var totalUnsubscription = 0
     
-    var maleVisitorsAge = [Int]()
-    var femaleVisitorsAge = [Int]()
-    
     init() {
         super.init(style: .insetGrouped)
-        
         tableView.register(UserCell.self, forCellReuseIdentifier: UserCell.reuseIdentifier)
     }
     
@@ -96,40 +86,33 @@ class StatisticsViewController: UITableViewController {
             let statistics = realm.objects(StatisticsModel.self)
             
             Observable.collection(from: users).subscribe { results in
-                self.getUsers()
-                self.tableView.reloadData()
-            }.disposed(by: bag)
-            
-            Observable.collection(from: statistics).subscribe { results in
-                if results.element != nil && results.element!.isEmpty {
-                    // If no data in database then request to server
-                    DispatchQueue.global().async {
-                        NetworkManager.shared.fetchStatistics { objects in
-                            objects.forEach { object in
-                                StorageManager.shared.createStatisticsInstance(userId: object.user_id, type: object.type, listDatesRaw: object.dates)
-                            }
-                            
-                            self.getStatistics()
-                        }
-                        
-                    }
+                if results.element != nil && results.element!.isEmpty || results.element == nil {
                     return
                 }
                 
-                self.getStatistics()
+                self.prepareUsers(usersInstances: results.element!.toArray())
                 self.tableView.reloadData()
+                
+            }.disposed(by: bag)
+            
+            Observable.collection(from: statistics).subscribe { results in
+                if results.element != nil && results.element!.isEmpty || results.element == nil {
+                    return
+                }
+                
+                self.prepareStatistics(statisticsInstances: results.element!.toArray())
+                self.tableView.reloadData()
+                
             }.disposed(by: bag)
         } catch {
             print(error)
         }
         
         visitorsChartState.asObservable().subscribe { _ in
-            self.getStatistics()
             self.tableView.reloadData()
         }.disposed(by: bag)
         
         sexAndAgeChartState.asObservable().subscribe { _ in
-            self.getStatistics()
             self.tableView.reloadData()
         }.disposed(by: bag)
     }
@@ -139,10 +122,10 @@ class StatisticsViewController: UITableViewController {
         
         title = "Статистика"
         subscribe()
-        loadData()
+        prepareTableStructure()
     }
 
-    func loadData() {
+    func prepareTableStructure() {
         // Creating a table structure
         datasource = [
             Cell(title: "Посетители", childs: [
@@ -176,97 +159,38 @@ class StatisticsViewController: UITableViewController {
         ]
     }
     
-    func getUsers() {
-        do {
-            let realm = try Realm()
-            let objects = realm.objects(UserModel.self).sorted(by: { $0.listVisitTimestamps.count > $1.listVisitTimestamps.count })
-            users = objects.prefix(3).map { object in
-                User(name: object.username, age: object.age, isOnline: object.isOnline, avatarData: object.imageData)
-            }
-            
-            DispatchQueue.main.async { [weak self] in
-                self?.tableView.reloadData()
-            }
-            
-        } catch {
-            print(error)
-            return
-        }
-        
-        if !users.isEmpty{
-            return
-        }
-        
-        // If no data in database then request to server
-        NetworkManager.shared.fetchUsers { users in
-            users.forEach { user in
-                StorageManager.shared.createUser(id: user.id,
-                                                 sex: user.sex,
-                                                 username: user.username,
-                                                 isOnline: user.isOnline,
-                                                 age: user.age)
-                
-                if let imageUrl = user.files.first(where: { $0.type == "avatar" })?.url {
-                    NetworkManager.shared.fetchAvatarForUser(id: user.id, url: imageUrl) { data in
-                        StorageManager.shared.setImageData(id: user.id, data: data)
-                    }
-                }
-            }
+    func prepareUsers(usersInstances: [UserModel]) {
+        users = usersInstances.prefix(3).map { object in
+            User(name: object.username, age: object.age, isOnline: object.isOnline, avatarData: object.imageData)
         }
     }
     
-    func getStatistics() {
-        // Initializing dictionary in the format "date.timestamp: count" to record the number of events in each day
-        let dict = getDaysOfMonth()
-        
-        visitStatisticsSmallChart = dict
-        subscriptionStatistics = dict
-        unsubscriptionStatistics = dict
-        
-        visitStatisticsBigChart = getTimeInterval()
-        
+    func prepareStatistics(statisticsInstances: [StatisticsModel]) {
         totalVisits = (0, 0)
         totalSubscriptions = 0
         totalUnsubscription = 0
-        
-        maleVisitorsAge = []
-        femaleVisitorsAge = []
         
         do {
             let realm = try Realm()
             let visitStatisticsInstance = realm.objects(StatisticsModel.self).filter("type == %@", StatisticsModel.EventType.visit.rawValue)
             visitStatisticsInstance.forEach { item in
                 item.listTimestamps.forEach { timestamp in
-                    visitStatisticsSmallChart[timestamp]? += 1
-                    
                     let date = Date(timeIntervalSince1970: timestamp)
-                    if isDateInCurrentMonth(date) {
+                    if Constants.shared.isDateInCurrentMonth(date) {
                         totalVisits.0 += 1
-                    } else if isDateInPreviousMonth(date) {
+                        
+                    } else if Constants.shared.isDateInPreviousMonth(date) {
                         totalVisits.1 += 1
+                        
                     }
-                    
-                    if isDisplayNeededForSectionVisitorsBySexAndAge(timestamp: timestamp) {
-                        if let userInstance = realm.object(ofType: UserModel.self, forPrimaryKey: item.userId) {
-                            if userInstance.sex == "M" {
-                                maleVisitorsAge.append(userInstance.age)
-                            } else {
-                                femaleVisitorsAge.append(userInstance.age)
-                            }
-                        }
-                    }
-                    
-                    addValueToVisitorsChart(timestamp: timestamp)
                 }
             }
             
             let subscribeStatisticsInstance = realm.objects(StatisticsModel.self).filter("type == %@", StatisticsModel.EventType.subscription.rawValue)
             subscribeStatisticsInstance.forEach { item in
                 item.listTimestamps.forEach { timestamp in
-                    subscriptionStatistics[timestamp]? += 1
-                    
                     let date = Date(timeIntervalSince1970: timestamp)
-                    if isDateInCurrentMonth(date) {
+                    if Constants.shared.isDateInCurrentMonth(date) {
                         totalSubscriptions += 1
                     }
                 }
@@ -275,10 +199,8 @@ class StatisticsViewController: UITableViewController {
             let unsubscribeStatisticsInstance = realm.objects(StatisticsModel.self).filter("type == %@", StatisticsModel.EventType.unsubscription.rawValue)
             unsubscribeStatisticsInstance.forEach { item in
                 item.listTimestamps.forEach { timestamp in
-                    unsubscriptionStatistics[timestamp]? += 1
-                    
                     let date = Date(timeIntervalSince1970: timestamp)
-                    if isDateInCurrentMonth(date) {
+                    if Constants.shared.isDateInCurrentMonth(date) {
                         totalUnsubscription += 1
                     }
                 }
@@ -286,150 +208,6 @@ class StatisticsViewController: UITableViewController {
         } catch {
             print(error)
         }
-    }
-    
-    func getDaysOfMonth() -> [Double: Int] {
-        let now = Date()
-        
-        var calendar = Calendar.current
-        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
-        
-        let monthRange = calendar.range(of: .day, in: .month, for: now) ?? 1..<30
-        let components = calendar.dateComponents([.year, .month, .day], from: now)
-        var date = calendar.date(from: components)
-        
-        var dictionary: [Double: Int] = [:]
-        
-        for _ in monthRange {
-            dictionary[date!.timeIntervalSince1970] = 0
-            date = calendar.date(byAdding: .day, value: -1, to: date!)
-        }
-        
-        return dictionary
-    }
-    
-    func getTimeInterval() -> [Double: Int] {
-        var component: Calendar.Component? = nil
-        var components: DateComponents? = nil
-        
-        var calendar = Calendar.current
-        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
-        var multiplier = 1
-        
-        switch visitorsChartState.value {
-        case .byDay:
-            component = .day
-            components = calendar.dateComponents([.year, .month, .day], from: Date())
-        case .byWeek:
-            component = .day
-            components = calendar.dateComponents([.year, .month, .day], from: Date())
-            multiplier = 4
-        case .byMonth:
-            component = .month
-            components = calendar.dateComponents([.year, .month], from: Date())
-        default:
-            break
-        }
-        
-        let currentDate = calendar.date(from: components!)
-        
-        var dictionary: [Double: Int] = [:]
-        
-        for i in 0...(7 * multiplier) {
-            let date = calendar.date(byAdding: component!, value: -i, to: currentDate!)
-            dictionary[date!.timeIntervalSince1970] = 0
-        }
-        
-        return dictionary
-    }
-    
-    func isDisplayNeededForSectionVisitorsBySexAndAge(timestamp: Double) -> Bool {
-        let date = Date(timeIntervalSince1970: timestamp)
-        switch sexAndAgeChartState.value {
-        case .byDay:
-            return isDateInCurrentDay(date)
-        case .byWeek:
-            return isDateInCurrentWeek(date)
-        case .byMonth:
-            return isDateInCurrentMonth(date)
-        case .byAllPeriod:
-            return true
-        }
-    }
-    
-    func isDisplayNeededForSectionAllVisitors(timestamp: Double) -> Bool {
-        let date = Date(timeIntervalSince1970: timestamp)
-        switch visitorsChartState.value {
-        case .byDay:
-            return isDateInCurrentDay(date)
-        case .byWeek:
-            return isDateInCurrentWeek(date)
-        case .byMonth:
-            return isDateInCurrentMonth(date)
-        default:
-            return false
-        }
-    }
-    
-    func addValueToVisitorsChart(timestamp: Double) {
-        switch visitorsChartState.value {
-        case .byDay, .byWeek:
-            visitStatisticsBigChart[timestamp]? += 1
-            return
-        default:
-            break
-        }
-        
-        let date = Date(timeIntervalSince1970: timestamp)
-        
-        var calendar = Calendar.current
-        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
-        
-        let components = calendar.dateComponents([.year, .month], from: date)
-        
-        let dateToAdd = calendar.date(from: components)
-        let timestampToAdd = dateToAdd?.timeIntervalSince1970
-        
-        visitStatisticsBigChart[timestampToAdd!]? += 1
-    }
-    
-    func isDateInCurrentMonth(_ date: Date) -> Bool {
-        let calendar = Calendar.current
-        let currentDateComponents = calendar.dateComponents([.year, .month], from: Date())
-        
-        let givenDateComponents = calendar.dateComponents([.year, .month], from: date)
-        
-        return currentDateComponents.year == givenDateComponents.year && currentDateComponents.month == givenDateComponents.month
-    }
-    
-    func isDateInCurrentWeek(_ date: Date) -> Bool {
-        let calendar = Calendar.current
-        let currentDateComponents = calendar.dateComponents([.year, .month, .day], from: Date())
-        
-        let givenDateComponents = calendar.dateComponents([.year, .month, .day], from: date)
-        
-        return currentDateComponents.year == givenDateComponents.year && currentDateComponents.month == givenDateComponents.month && currentDateComponents.day! - givenDateComponents.day! <= 7
-    }
-    
-    func isDateInCurrentDay(_ date: Date) -> Bool {
-        let calendar = Calendar.current
-        let currentDateComponents = calendar.dateComponents([.year, .month, .day], from: Date())
-        
-        let givenDateComponents = calendar.dateComponents([.year, .month, .day], from: date)
-        
-        return currentDateComponents.year == givenDateComponents.year && currentDateComponents.month == givenDateComponents.month && currentDateComponents.day == givenDateComponents.day
-    }
-    
-    func isDateInPreviousMonth(_ date: Date) -> Bool {
-        let calendar = Calendar.current
-        let currentDate = Date()
-        
-        let previousMonthDate = calendar.date(byAdding: .month, value: -1, to: currentDate)!
-        let previousMonthComponents = calendar.dateComponents([.year, .month], from: previousMonthDate)
-        
-        let givenDateComponents = calendar.dateComponents([.year, .month], from: date)
-        
-        return previousMonthComponents.year == givenDateComponents.year && previousMonthComponents.month == givenDateComponents.month
     }
 }
 
@@ -451,14 +229,26 @@ extension StatisticsViewController {
         
         switch item.section {
         case .visitors:
-            let cell = VisitorsSmallChartTableViewCell()
-            cell.setup(text: "Количество посетителей в этом месяце \(totalVisits.0 > totalVisits.1 ? "выросло" : "упало")", count: String(totalVisits.0), color: .green, data: visitStatisticsSmallChart)
+            let cell = SmallChartTableViewCell()
+            cell.setup(text: "Количество посетителей в этом месяце \(totalVisits.0 > totalVisits.1 ? "выросло" : "упало")", count: String(totalVisits.0), color: .green, type: .visit)
             
             return cell
             
         case .visitorsChart:
             let cell = VisitorsBigChartTableViewCell()
-            cell.setup(data: visitStatisticsBigChart)
+            
+            var state: VisitorsChartViewController.State? = nil
+            switch visitorsChartState.value {
+            case .byDay:
+                state = .byDay
+            case .byWeek:
+                state = .byWeek
+            case .byMonth:
+                state = .byMonth
+            default: break
+            }
+            
+            cell.setup(state: state!)
             
             return cell
             
@@ -476,33 +266,57 @@ extension StatisticsViewController {
             
         case .chartBySex:
             let cell = ChartBySexTableViewCell()
-            cell.setup(maleCount: maleVisitorsAge.count, femaleCount: femaleVisitorsAge.count)
+            
+            var state: ChartBySexViewController.State? = nil
+            switch sexAndAgeChartState.value {
+            case .byDay:
+                state = .byDay
+            case .byWeek:
+                state = .byWeek
+            case .byMonth:
+                state = .byMonth
+            default: 
+                state = .byAllPeriod
+            }
+            
+            cell.setup(state: state!)
             
             return cell
             
         case .chartByAge:
             let cell = ChartByAgeTableViewCell()
-            cell.setup(maleAges: maleVisitorsAge, femaleAges: femaleVisitorsAge)
+            
+            var state: ChartByAgeViewController.State? = nil
+            switch sexAndAgeChartState.value {
+            case .byDay:
+                state = .byDay
+            case .byWeek:
+                state = .byWeek
+            case .byMonth:
+                state = .byMonth
+            default:
+                state = .byAllPeriod
+            }
+            
+            cell.setup(state: state!)
             
             return cell
             
         case .subscribers:
-            let cell = VisitorsSmallChartTableViewCell()
-            cell.setup(text: "Новые наблюдатели в этом месяце", count: String(totalSubscriptions), color: .green, data: subscriptionStatistics)
+            let cell = SmallChartTableViewCell()
+            cell.setup(text: "Новые наблюдатели в этом месяце", count: String(totalSubscriptions), color: .green, type: .subscription)
             
             return cell
             
         case .unsubscribers:
-            let cell = VisitorsSmallChartTableViewCell()
-            cell.setup(text: "Пользователей перестали за Вами наблюдать", count: String(totalUnsubscription), color: .red, data: unsubscriptionStatistics)
+            let cell = SmallChartTableViewCell()
+            cell.setup(text: "Пользователей перестали за Вами наблюдать", count: String(totalUnsubscription), color: .red, type: .unsubscription)
             
             return cell
             
         default:
             return UITableViewCell()
         }
-        
-        
     }
 }
 

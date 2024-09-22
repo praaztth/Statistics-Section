@@ -9,8 +9,6 @@ import UIKit
 import SwiftUI
 
 class VisitorsBigChartTableViewCell: UITableViewCell {
-    let view = UIView()
-    
     let countLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 20)
@@ -28,12 +26,12 @@ class VisitorsBigChartTableViewCell: UITableViewCell {
     }()
     
     
-    func setup(data: [Double: Int]) {
-        let chartView = BigChartView(data: data)
-        let hostingController = UIHostingController(rootView: chartView)
+    func setup(state: VisitorsChartViewController.State) {
+        let controller = VisitorsChartViewController(state: state)
+        let view = controller.chartView
         
-        contentView.addSubview(hostingController.view)
+        contentView.addSubview(view)
         
-        hostingController.view.pin.top(15).left(20).width(of: contentView).height(190)
+        view.pin.top(15).left(20).width(of: contentView).height(190)
     }
 }

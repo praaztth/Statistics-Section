@@ -9,16 +9,10 @@ import SwiftUI
 import Charts
 
 struct BigChartView: View {
-    struct ChartData: Identifiable {
-        var id = UUID()
-        var date: Date
-        var count: Int
-    }
-    
     var data: [ChartData]
     
-    init(data: [Double: Int]) {
-        self.data = data.map { ChartData(date: Date(timeIntervalSince1970: $0.key), count: $0.value)}.sorted { $0.date < $1.date }
+    init(data: [ChartData]) {
+        self.data = data
     }
     
     var body: some View {
@@ -40,5 +34,5 @@ struct BigChartView: View {
 }
 
 #Preview {
-    BigChartView(data: [234234234: 3, 2342343: 6])
+    BigChartView(data: [ChartData(date: Date(), count: 7)])
 }

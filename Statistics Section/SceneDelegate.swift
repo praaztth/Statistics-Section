@@ -25,6 +25,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
+        
+        DataService.shared.loadData { users, statistics in
+            
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
